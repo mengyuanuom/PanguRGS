@@ -1,0 +1,243 @@
+{
+  "date": "2026-08-10",
+  "server_commits": {
+    "drog_drogoff_evaluation": "91d3c51ab5c6a8964c5b4357675d7d3b3def35b6",
+    "additional_current_evaluation": "3fac0830759c89097f3e7c938a00a5d471a50ff2",
+    "crog_evaluation": "20c9a6c7b6f105926a906d97803da0d44094b4c2",
+    "legacy_compatibility_evaluation": "b09d9bf"
+  },
+  "dataset": {
+    "name": "OCID-VLG",
+    "split": "test",
+    "samples": 17749,
+    "protocol": "crog_legacy"
+  },
+  "evaluation": {
+    "hardware": "Ascend 910B3",
+    "world_size_per_model": 4,
+    "legacy_compatibility_world_size_per_model": 2,
+    "batch_size_per_device": 32,
+    "workers_per_device": 2
+  },
+  "models": [
+    {
+      "architecture": "drogoff",
+      "checkpoint": "best_epoch_030_J1_91.24_J5_94.12.pth",
+      "checkpoint_sha256": "1b18ea348918854eac60ad55294f518e06a6b05613feeb946a202a37de0950e3",
+      "grasp_size_activation": "sigmoid",
+      "validation": {"iou": 82.11, "j1": 91.24, "j5": 94.12},
+      "test": {
+        "iou": 81.23,
+        "pr50": 97.02,
+        "pr60": 95.66,
+        "pr70": 89.19,
+        "pr80": 68.54,
+        "pr90": 22.33,
+        "j1": 89.30,
+        "j5": 92.94
+      }
+    },
+    {
+      "architecture": "drog",
+      "checkpoint": "best_epoch_036_J1_85.78_J5_93.57.pth",
+      "checkpoint_sha256": "93462598fe0967e256b034a843bc4fa45c64d8f223385777fa6591b01e47dd06",
+      "grasp_size_activation": "clamp",
+      "validation": {
+        "iou": 82.31,
+        "j1": 89.62,
+        "j5": 94.50,
+        "grasp_size_activation": "clamp",
+        "source": "2026-08-10 aligned re-evaluation"
+      },
+      "historical_training_log_validation": {
+        "iou": 82.31,
+        "j1": 85.78,
+        "j5": 93.57,
+        "grasp_size_activation": "sigmoid",
+        "note": "legacy mismatch; exactly reproduced by the A/B run"
+      },
+      "test": {
+        "iou": 81.38,
+        "pr50": 97.39,
+        "pr60": 96.40,
+        "pr70": 89.67,
+        "pr80": 67.82,
+        "pr90": 22.03,
+        "j1": 89.10,
+        "j5": 93.58
+      }
+    },
+    {
+      "architecture": "lgd",
+      "checkpoint": "best_epoch_035_J1_84.28_J5_88.71.pth",
+      "checkpoint_sha256": "c592238ba07f4cf82959f6909579688ed11058d82bfdc48fbf90d1457ffd6b53",
+      "evaluation_code_commit": "b09d9bf",
+      "grasp_size_activation": "clamp",
+      "historical_training_log_validation": {
+        "iou": 67.59,
+        "j1": 84.28,
+        "j5": 88.71,
+        "grasp_size_activation": "sigmoid"
+      },
+      "legacy_validation_reproduction": {
+        "iou": 67.50,
+        "j1": 84.14,
+        "j5": 88.48,
+        "grasp_size_activation": "sigmoid",
+        "note": "small difference expected from stochastic diffusion sampling"
+      },
+      "test": {
+        "iou": 65.94,
+        "pr50": 88.38,
+        "pr60": 79.14,
+        "pr70": 54.71,
+        "pr80": 26.96,
+        "pr90": 0.02,
+        "j1": 84.94,
+        "j5": 87.27
+      },
+      "excluded_current_code_test": {
+        "iou": 7.18,
+        "j1": 8.66,
+        "j5": 8.89,
+        "reason": "post-training LGD forward semantics are incompatible with this checkpoint"
+      }
+    },
+    {
+      "architecture": "crog",
+      "checkpoint": "best_epoch_017_J1_85.80_J5_91.33.pth",
+      "checkpoint_sha256": "ba992ca78436ee47b32baa3162f9aeed3fc4e8b05f9223e03c74c1cf0616318b",
+      "evaluation_code_commit": "20c9a6c7b6f105926a906d97803da0d44094b4c2",
+      "grasp_size_activation": "clamp",
+      "validation": {
+        "iou": 80.34,
+        "j1": 88.67,
+        "j5": 92.19,
+        "grasp_size_activation": "clamp",
+        "source": "2026-08-10 aligned re-evaluation"
+      },
+      "historical_training_log_validation": {
+        "iou": 80.34,
+        "j1": 85.80,
+        "j5": 91.33,
+        "grasp_size_activation": "sigmoid",
+        "note": "legacy mismatch; exactly reproduced by the A/B run"
+      },
+      "test": {
+        "iou": 79.34,
+        "pr50": 95.68,
+        "pr60": 93.21,
+        "pr70": 84.53,
+        "pr80": 63.48,
+        "pr90": 17.01,
+        "j1": 88.17,
+        "j5": 91.36
+      }
+    },
+    {
+      "architecture": "grconvnetclip",
+      "checkpoint": "best_epoch_036_J1_86.27_J5_90.94.pth",
+      "checkpoint_sha256": "f75c4d1142b3fa16187bfeac914548fffd449be3a1c756607654a89919ab4a63",
+      "evaluation_code_commit": "3fac0830759c89097f3e7c938a00a5d471a50ff2",
+      "grasp_size_activation": "clamp",
+      "historical_training_log_validation": {
+        "iou": 2.31,
+        "j1": 86.27,
+        "j5": 90.94,
+        "grasp_size_activation": "sigmoid"
+      },
+      "test": {
+        "iou": 2.30,
+        "pr50": 0.00,
+        "pr60": 0.00,
+        "pr70": 0.00,
+        "pr80": 0.00,
+        "pr90": 0.00,
+        "j1": 88.14,
+        "j5": 91.21
+      },
+      "iou_note": "no segmentation head; grasp quality is reused as ins_pred"
+    },
+    {
+      "architecture": "ggcnnclip",
+      "checkpoint": "best_epoch_036_J1_20.26_J5_24.32.pth",
+      "checkpoint_sha256": "0575999e856c42384ec8aca33caa22230d0b9a59a4060f661e23530b47cc7660",
+      "evaluation_code_commit": "b09d9bf",
+      "grasp_size_activation": "clamp",
+      "historical_training_log_validation": {
+        "iou": 2.31,
+        "j1": 20.26,
+        "j5": 24.32,
+        "grasp_size_activation": "sigmoid"
+      },
+      "legacy_validation_reproduction": {
+        "iou": 2.31,
+        "j1": 20.26,
+        "j5": 24.32,
+        "grasp_size_activation": "sigmoid",
+        "note": "exact reproduction"
+      },
+      "test": {
+        "iou": 2.30,
+        "pr50": 0.00,
+        "pr60": 0.00,
+        "pr70": 0.00,
+        "pr80": 0.00,
+        "pr90": 0.00,
+        "j1": 15.32,
+        "j5": 17.13
+      },
+      "excluded_current_code_test": {
+        "iou": 2.30,
+        "j1": 6.70,
+        "j5": 8.94,
+        "reason": "post-training FiLM/text normalization changes are incompatible with this checkpoint"
+      },
+      "iou_note": "no segmentation head; grasp quality is reused as ins_pred"
+    },
+    {
+      "architecture": "etrg",
+      "checkpoint": "best_epoch_034_J1_73.55_J5_78.77.pth",
+      "checkpoint_sha256": "e2ef4265a80c6caa9e1f106f5aa49b64fba5b70a2a610433573eed07b55c2a2e",
+      "evaluation_code_commit": "3fac0830759c89097f3e7c938a00a5d471a50ff2",
+      "grasp_size_activation": "clamp",
+      "historical_training_log_validation": {
+        "iou": 76.66,
+        "j1": 73.55,
+        "j5": 78.77,
+        "grasp_size_activation": "sigmoid"
+      },
+      "test": {
+        "iou": 74.97,
+        "pr50": 90.21,
+        "pr60": 87.27,
+        "pr70": 78.70,
+        "pr80": 53.71,
+        "pr90": 12.66,
+        "j1": 73.73,
+        "j5": 76.85
+      }
+    }
+  ],
+  "drog_width_decoder_ab": {
+    "split": "val",
+    "samples": 8669,
+    "checkpoint": "best_epoch_036_J1_85.78_J5_93.57.pth",
+    "clamp": {"iou": 82.31, "j1": 89.62, "j5": 94.50},
+    "sigmoid": {"iou": 82.31, "j1": 85.78, "j5": 93.57}
+  },
+  "crog_width_decoder_ab": {
+    "split": "val",
+    "samples": 8669,
+    "checkpoint": "best_epoch_017_J1_85.80_J5_91.33.pth",
+    "clamp": {"iou": 80.34, "j1": 88.67, "j5": 92.19},
+    "sigmoid": {"iou": 80.34, "j1": 85.80, "j5": 91.33}
+  },
+  "legacy_compatibility": {
+    "affected_architectures": ["lgd", "ggcnnclip"],
+    "training_era_commit": "b09d9bf",
+    "post_training_forward_change_commit": "1427e0a",
+    "note": "strict state-dict loading succeeds but current forward semantics invalidate old weights"
+  },
+  "missing_checkpoints": []
+}

@@ -1,0 +1,73 @@
+DATA:
+  dataset: OCID-VLG
+  # Recommended server setup: `ln -sfn ../data datasets` in the repo root.
+  root_path: ./datasets/OCID-VLG
+  version: multiple
+  with_depth: false
+  train_split: train
+  val_split: val
+MODEL:
+  architecture: pangu_etrg
+TRAIN:
+  # RGB-only ETRG R50 profile. The auxiliary encoder consumes RGB.
+  etrg_input_mode: rgb
+  use_grasp_masks: True
+  clip_pretrain: pretrain/RN50.pt
+  depth_pretrain: pretrain/resnet18-f37072fd.pth
+  depth_backbone_pretrained: false
+  depth_normalization: inverse_max
+  input_size: 416
+  word_len: 20
+  word_dim: 1024
+  ladder_dim: 64
+  nhead: 4
+  multi_stage: 3
+  vis_dim: 512
+  fpn_in: [512, 1024, 1024]
+  fpn_out: [256, 512, 1024]
+  sync_bn: False
+  num_layers: 3
+  num_head: 8
+  dim_ffn: 512
+  dropout: 0.1
+  intermediate: False
+  workers: 4  # per process; 32 workers total with eight NPUs
+  workers_val: 2
+  epochs: 36
+  milestones: [30]
+  start_epoch: 0
+  batch_size: 32  # global batch size
+  batch_size_val: 32  # global validation batch size
+  base_lr: 0.0001  # official ETRG base LR
+  lr_decay: 0.1
+  lr_multi: 1.0
+  weight_decay: 0.01
+  max_norm: 0.0
+  manual_seed: 0
+  print_freq: 100
+  amp: False
+  optimizer: adam
+  optimizer_foreach: False
+  pin_memory: False
+  exp_name: pangu_etrg_r50_ocid_vlg_8npu
+  output_folder: exp/ocid_vlg
+  save_freq: 0
+  val_freq: 1
+  val_start_epoch: 11
+  save_epochs: [5, 10]
+  weight:
+  resume:
+  evaluate: True
+Distributed:
+  dist_url: env://
+  dist_backend: hccl
+  multiprocessing_distributed: True
+  world_size: 1
+  rank: 0
+TEST:
+  test_split: test
+  evaluation_protocol: crog_legacy
+  test_batch_size: 32  # per device; reduce with --opts if memory is limited
+  test_workers: 2
+  grasp_size_activation: auto
+  visualize: False

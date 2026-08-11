@@ -1,0 +1,69 @@
+DATA:
+  dataset: GraspTool
+  root_path: ./datasets/grasp-tools/aug_graspall_v2
+  train_split: train
+  val_split: val
+  offset_r: 20
+  offset_sigma:
+  dynamic_train_prompts: True
+  dynamic_prompt_seed: 2025
+MODEL:
+  architecture: lgd
+TRAIN:
+  version: multiple
+  clip_pretrain: pretrain/RN50.pt
+  input_size: 224
+  word_len: 32
+  word_dim: 1024
+  use_pretrained_clip: True
+  use_grasp_masks: True
+  lgd_base_channels: 32
+  lgd_time_dim: 128
+  lgd_timesteps: 1000
+  lgd_sampling_steps: 50
+  lgd_diffusion_weight: 1.0
+  # Optional non-official ablation. Keep disabled for stable sparse-map training.
+  lgd_contrastive_weight: 0.0
+  lgd_contrastive_temperature: 0.1
+  lgd_geometry_mask_threshold: 0.05
+  sync_bn: False
+  amp: False
+  optimizer: adam
+  pin_memory: False
+  workers: 4
+  workers_val: 2
+  epochs: 36
+  milestones: [30]
+  start_epoch: 0
+  batch_size: 32
+  batch_size_val: 32
+  base_lr: 0.0001
+  lr_decay: 0.1
+  lr_multi: 0.1
+  weight_decay: 0.0
+  max_norm: 1.0
+  manual_seed: 0
+  print_freq: 100
+  exp_name: lgd_grasp_tools_8npu
+  output_folder: exp/grasp_tools
+  save_freq: 0
+  val_freq: 1
+  val_start_epoch: 11
+  save_epochs: [5, 10]
+  weight:
+  resume:
+  evaluate: True
+Distributed:
+  dist_url: env://
+  dist_backend: hccl
+  multiprocessing_distributed: True
+  world_size: 1
+  rank: 0
+TEST:
+  test_split: test
+  evaluation_protocol: crog_legacy
+  test_batch_size: 32
+  test_workers: 2
+  grasp_size_activation: auto
+  restore_grasp_size_scale: True
+  visualize: False

@@ -1,0 +1,80 @@
+DATA:
+  dataset: vcot
+  root_path: ./datasets/graspanything-vcot
+  split_root: ./datasets/graspanything-vcot/split/vcot
+  prompt_template: "Grasp the {object_name}"
+  with_depth: False
+  train_split: train
+  val_split: seen
+  grasp_size_factor: 300
+MODEL:
+  architecture: pangu_maplegrasp
+TRAIN:
+  version: multiple
+  clip_pretrain: pretrain/RN50.pt
+  input_size: 416
+  word_len: 17
+  word_dim: 1024
+  vis_dim: 512
+  fpn_in: [512, 1024, 1024]
+  fpn_out: [256, 512, 1024]
+  sync_bn: False
+  amp: False
+  optimizer: adam
+  optimizer_foreach: False
+  pin_memory: False
+  num_layers: 3
+  num_head: 8
+  dim_ffn: 2048
+  dropout: 0.1
+  intermediate: False
+  use_contrastive: True
+  use_pretrained_clip: True
+  stage1: False
+  stage2: True
+  use_gt_obj_masks: False
+  use_grasp_masks: True
+  predict_grasp_short_side: True
+  short_side_loss_weight: 1.0
+  align_grasp_size_loss: True
+  workers: 4
+  workers_val: 2
+  epochs: 24
+  milestones: [20]
+  start_epoch: 0
+  batch_size: 32  # global batch size; 4 samples per process on 8 NPUs
+  batch_size_val: 32
+  gradient_accumulation_steps: 1
+  base_lr: 0.0001
+  lr_decay: 0.1
+  lr_multi: 0.1
+  weight: exp/vcot/pangu_maplegrasp_stage1_vcot_seen_8npu/best_iou_model.pth
+  weight_decay: 0.0
+  max_norm: 1.0
+  manual_seed: 0
+  print_freq: 100
+  exp_name: pangu_maplegrasp_stage2_vcot_seen_8npu
+  output_folder: exp/vcot
+  save_freq: 0
+  val_freq: 1
+  val_start_epoch: 11
+  save_epochs: [5, 10]
+  grasp_sr_topk: 5
+  resume:
+  evaluate: True
+Distributed:
+  dist_url: env://
+  dist_backend: hccl
+  multiprocessing_distributed: True
+  world_size: 1
+  rank: 0
+TEST:
+  test_split: unseen
+  evaluation_protocol: vcot_official
+  grasp_topk: [1]
+  test_batch_size: 32
+  test_workers: 2
+  grasp_size_activation: auto
+  restore_grasp_size_scale: True
+  filter_grasps_by_segmentation: False
+  visualize: False

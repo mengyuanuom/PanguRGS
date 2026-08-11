@@ -1,0 +1,68 @@
+DATA:
+  dataset: OCID-VLG
+  root_path: ./datasets/OCID-VLG
+  with_depth: False
+  train_split: train
+  val_split: val
+  offset_r: 20
+  offset_sigma:
+MODEL:
+  architecture: maplegrasp
+TRAIN:
+  version: multiple
+  clip_pretrain: pretrain/RN50.pt
+  input_size: 416
+  word_len: 17
+  word_dim: 1024
+  vis_dim: 512
+  fpn_in: [512, 1024, 1024]
+  fpn_out: [256, 512, 1024]
+  sync_bn: False
+  amp: False
+  optimizer: adam
+  pin_memory: False
+  num_layers: 3
+  num_head: 8
+  dim_ffn: 2048
+  dropout: 0.1
+  intermediate: False
+  use_contrastive: True
+  use_pretrained_clip: True
+  # Official MapleGrasp Stage 1: segmentation only.
+  stage1: True
+  stage2: False
+  use_gt_obj_masks: False
+  use_grasp_masks: False
+  workers: 4
+  workers_val: 2
+  epochs: 24
+  milestones: [20]
+  start_epoch: 0
+  batch_size: 32  # global batch size
+  batch_size_val: 32  # global validation batch size
+  base_lr: 0.0001
+  lr_decay: 0.1
+  lr_multi: 0.1
+  weight_decay: 0.0
+  max_norm: 0.0
+  manual_seed: 0
+  print_freq: 100
+  exp_name: maplegrasp_stage1_ocid_vlg_8npu
+  output_folder: exp/ocid_vlg
+  save_freq: 0
+  val_freq: 1
+  val_start_epoch: 11
+  save_epochs: [5, 10]
+  weight:
+  resume:
+  evaluate: True
+Distributed:
+  dist_url: env://
+  dist_backend: hccl
+  multiprocessing_distributed: True
+  world_size: 1
+  rank: 0
+TEST:
+  test_split: test
+  evaluation_protocol: crog_legacy
+  visualize: False

@@ -1,0 +1,60 @@
+DATA:
+  dataset: OCID-VLG
+  root_path: ./datasets/OCID-VLG
+  with_depth: False
+  train_split: train
+  val_split: val
+  offset_r: 20
+  offset_sigma:
+MODEL:
+  architecture: pangu_ggcnnclip
+TRAIN:
+  clip_pretrain: pretrain/RN50.pt
+  version: multiple
+  input_channels: 3
+  input_size: 416
+  word_len: 17
+  word_dim: 1024
+  amp: False
+  sync_bn: False
+  optimizer: adam
+  pin_memory: False
+
+  workers: 4  # per process; 32 workers total with eight NPUs
+  workers_val: 2
+  epochs: 36
+  milestones: [30]
+  start_epoch: 0
+  batch_size: 32  # global batch size
+  batch_size_val: 32  # global validation batch size
+  base_lr: 0.0001
+  lr_decay: 0.1
+  lr_multi: 0.1
+  weight_decay: 0.0
+  max_norm: 0.0
+  manual_seed: 0
+  print_freq: 100
+  exp_name: pangu_ggcnnclip_ocid_vlg_8npu
+  output_folder: exp/ocid_vlg
+  save_freq: 0
+  val_freq: 1
+  val_start_epoch: 11
+  save_epochs: [5, 10]
+  weight:
+  resume:
+  evaluate: True
+  use_pretrained_clip: True
+  use_grasp_masks: True
+Distributed:
+  dist_url: env://
+  dist_backend: hccl
+  multiprocessing_distributed: True
+  world_size: 1
+  rank: 0
+TEST:
+  test_split: test
+  evaluation_protocol: crog_legacy
+  test_batch_size: 32  # per device; reduce with --opts if memory is limited
+  test_workers: 2
+  grasp_size_activation: auto
+  visualize: False
